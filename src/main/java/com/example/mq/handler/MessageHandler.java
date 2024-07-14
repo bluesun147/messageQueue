@@ -1,6 +1,6 @@
 package com.example.mq.handler;
 
-import org.apache.logging.log4j.message.Message;
+import com.example.mq.model.Message;
 
 public interface MessageHandler {
     void handle(final Message message);

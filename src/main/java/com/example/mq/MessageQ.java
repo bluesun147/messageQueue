@@ -1,8 +1,8 @@
 package com.example.mq;
 
+import com.example.mq.model.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.apache.logging.log4j.message.Message;
 import org.springframework.stereotype.Component;
 
 import java.util.Queue;
