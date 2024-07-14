@@ -1,8 +1,9 @@
 package com.example.mq;
 
-import jakarta.websocket.MessageHandler;
+import com.example.mq.handler.MessageFailHandler;
+import com.example.mq.handler.MessageHandler;
+import com.example.mq.model.Message;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.message.Message;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +17,14 @@ import java.util.stream.IntStream;
 @Component
 public class MessageConsumer {
     private final List<MessageHandler> messageHandlerList;
+    private final MessageFailHandler failHandler;
     private final MessageQ messageQ;
     private final int threadPoolSize = 5;
     private boolean isTerminated = true;
 
-    public MessageConsumer(List<MessageHandler> messageHandlerList, MessageQ messageQ) {
+    public MessageConsumer(List<MessageHandler> messageHandlerList, MessageFailHandler failHandler, MessageQ messageQ) {
         this.messageHandlerList = messageHandlerList;
+        this.failHandler = failHandler;
         this.messageQ = messageQ;
     }
 
@@ -61,9 +64,9 @@ public class MessageConsumer {
     private void handleMessage(final Message message) {
         messageHandlerList.forEach(messageHandler -> {
             try {
-                // messageHandler.handle(message);
+                 messageHandler.handle(message);
             } catch (Exception e) {
-                // failHandler.handleFail(message, e);
+                 failHandler.handleFail(message, e);
             }
         });
     }

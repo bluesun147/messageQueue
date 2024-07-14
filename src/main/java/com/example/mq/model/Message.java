@@ -1,5 +1,6 @@
 package com.example.mq.model;
 
+import com.example.mq.handler.MessageFailHandler;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.util.List;
 public class Message<T> {
     private MessageType messgeType;
     private T content;
+    private MessageFailHandler failHandler;
     private int failCount = 0;
     private int tolerance = 3;
     private List<Exception> exceptionList = new ArrayList<>();
@@ -30,5 +32,8 @@ public class Message<T> {
 
     public void increaseFailCount() {
         failCount += 1;
+    }
+    public void takeFail(Exception e){
+        failHandler.handleFail(this, e);
     }
 }
